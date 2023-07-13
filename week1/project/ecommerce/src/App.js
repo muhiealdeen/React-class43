@@ -1,39 +1,44 @@
+// App.js
 import './App.css';
 
 import React, { useState } from 'react';
-// import CategoryList from './components/CategoryList';
-import ProductList from './components/ProductList';
 import allProducts from './fake-data/all-products';
-import allCategories from './fake-data/all-categories';
 
 const App = () => {
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [category, setCategory] = useState('all');
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
   };
 
-  const filteredProducts = selectedCategory
-    ? allProducts.filter((product) =>
-        product.category.includes(selectedCategory),
-      )
-    : allProducts;
+  const filteredProducts =
+    category === 'all'
+      ? allProducts
+      : allProducts.filter((product) => product.category === category);
 
   return (
     <div>
-      <h2>Products</h2>
-      <ul>
-        {allCategories.map((category, index) => (
-          <li
-            key={index}
-            className={selectedCategory === category ? 'active' : ''}
-            onClick={() => handleCategoryClick(category)}
-          >
-            {category}
+      <h1>Products</h1>
+      <button onClick={() => handleCategoryChange('all')}>All</button>
+      <button onClick={() => handleCategoryChange("men's clothing")}>
+        Men's Clothing
+      </button>
+      <button onClick={() => handleCategoryChange("women's clothing")}>
+        Women's Clothing
+      </button>
+      <button onClick={() => handleCategoryChange('jewelery')}>Jewelry</button>
+      <button onClick={() => handleCategoryChange('electronics')}>
+        Electronics
+      </button>
+
+      <ul className="product-list">
+        {filteredProducts.map((product) => (
+          <li key={product.id} className="product-card">
+            <img src={product.image} alt={product.title} />
+            <h3>{product.title}</h3>
           </li>
         ))}
       </ul>
-      <ProductList products={filteredProducts} />
     </div>
   );
 };
