@@ -1,42 +1,42 @@
-// App.js
 import './App.css';
 
 import React, { useState } from 'react';
 import allProducts from './fake-data/all-products';
+import allCategories from './fake-data/all-categories';
+import Product from './components/Product';
+import CategoryFilter from './components/CategoryFilter';
 
 const App = () => {
   const [category, setCategory] = useState('all');
 
   const handleCategoryChange = (newCategory) => {
-    setCategory(newCategory);
+    if (category === newCategory) {
+      setCategory('all');
+    } else {
+      setCategory(newCategory);
+    }
   };
 
   const filteredProducts =
     category === 'all'
       ? allProducts
-      : allProducts.filter((product) => product.category === category);
-
+      : allProducts.filter(
+          (product) => `FAKE: ${product.category}` === category,
+        );
+  // console.log('66666?????????????', filteredProducts);
+  // // console.log('3333333????????????????', product.category)
+  // console.log('888888888888????', category);
   return (
     <div>
       <h1>Products</h1>
-      <button onClick={() => handleCategoryChange('all')}>All</button>
-      <button onClick={() => handleCategoryChange("men's clothing")}>
-        Men's Clothing
-      </button>
-      <button onClick={() => handleCategoryChange("women's clothing")}>
-        Women's Clothing
-      </button>
-      <button onClick={() => handleCategoryChange('jewelery')}>Jewelry</button>
-      <button onClick={() => handleCategoryChange('electronics')}>
-        Electronics
-      </button>
-
+      <CategoryFilter
+        categories={[...allCategories, 'all']}
+        activeCategory={category}
+        onCategoryChange={handleCategoryChange}
+      />
       <ul className="product-list">
         {filteredProducts.map((product) => (
-          <li key={product.id} className="product-card">
-            <img src={product.image} alt={product.title} />
-            <h3>{product.title}</h3>
-          </li>
+          <Product key={product.id} product={product} />
         ))}
       </ul>
     </div>
