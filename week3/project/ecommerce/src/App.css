@@ -1,0 +1,161 @@
+/* App.css */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.app-content {
+  padding: 1rem;
+}
+
+.category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.category-buttons button {
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.category-buttons button.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 1rem;
+}
+
+.product-card {
+  position: relative;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.product-card img {
+  width: 90%;
+  height: auto;
+  object-fit: cover;
+}
+
+.product-card h3 {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.product-card p {
+  margin: 0.5rem 0;
+}
+
+.favorite-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 40px;
+}
+
+.favorite-button img {
+  width: 100%;
+  height: auto;
+}
+
+.image-detail {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+
+.navbar ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+.navbar li {
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.navbar li:first-child {
+  margin-left: auto;
+}
+
+.navbar li a {
+  color: rgb(86, 51, 167);
+  text-decoration: none;
+}
+
+.navbar li a:hover {
+  background-color: #e3e9ef;
+}
+
+@media (max-width: 768px) {
+  .product-list {
+    grid-gap: 0.5rem;
+  }
+
+  .category-buttons button {
+    margin-right: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-list {
+    grid-template-columns: 1fr;
+    grid-gap: 0.5rem;
+  }
+
+  .category-buttons button {
+    margin-right: 0.5rem;
+  }
+
+  .navbar {
+    flex-direction: column;
+  }
+
+  .navbar li {
+    display: block;
+    margin: 0.5rem 0;
+  }
+}
