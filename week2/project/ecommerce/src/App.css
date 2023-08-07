@@ -44,6 +44,10 @@ li {
   margin: 0.5rem 0;
 }
 
+.image-detail {
+  display: flex;
+  justify-content: center;
+}
 @media (max-width: 768px) {
   .product-list {
     grid-gap: 0.5rem;

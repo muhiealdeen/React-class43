@@ -1,20 +1,16 @@
-import './App.css';
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-// import Product from './components/Product';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
 import CategoryFilter from './components/CategoryFilter';
+import Products from './components/Product';
 import ProductDetail from './components/ProductDetail';
 
 const App = () => {
-  const [category, setCategory] = useState('all');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState('all');
   const [products, setProducts] = useState([]);
-
-  const handleCategoryChange = (newCategory) => {
-    setCategory(newCategory);
-  };
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -27,62 +23,73 @@ const App = () => {
         setLoading(false);
       })
       .catch((error) => {
-        setError('Failed to fetch categories');
         setLoading(false);
+        setError('Failed to fetch categories.');
+        console.error('Error fetching categories:', error);
       });
   }, []);
 
   useEffect(() => {
+    if (!category) return;
+
     setLoading(true);
     setError(null);
 
-    let apiUrl = 'https://fakestoreapi.com/products';
-    if (category !== 'all') {
-      apiUrl = `https://fakestoreapi.com/products/category/${category}`;
-    }
+    const endpoint =
+      category === 'all'
+        ? 'https://fakestoreapi.com/products'
+        : `https://fakestoreapi.com/products/category/${category}`;
 
-    fetch(apiUrl)
+    fetch(endpoint)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
         setLoading(false);
       })
       .catch((error) => {
-        setError('Failed to fetch products');
         setLoading(false);
+        setError('Failed to fetch products.');
+        console.error('Error fetching products:', error);
       });
   }, [category]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+  };
 
   return (
     <Router>
-      <div>
+      <div className="app-content">
         <h1>Products</h1>
-        <CategoryFilter
-          categories={categories}
-          activeCategory={category}
-          onCategoryChange={handleCategoryChange}
-        />
-        <ul className="product-list">
-          {products.map((product) => (
-            <li key={product.id} className="product-card">
-              <Link to={`/product/${product.id}`}>
-                <img src={product.image} alt={product.title} />
-                <h3>{product.title}</h3>
-              </Link>
-            </li>
+        <div className="category-buttons">
+          {categories.map((category) => (
+            <CategoryFilter
+              key={category}
+              category={category}
+              activeCategory={category}
+              handleCategoryChange={handleCategoryChange}
+            />
           ))}
-        </ul>
-        <Routes>
-          <Route path="/product/:id" element={<ProductDetail />} />
-        </Routes>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                loading ? (
+                  <p>Loading...</p>
+                ) : error ? (
+                  <p>Error: {error}</p>
+                ) : (
+                  <div className="product-list">
+                    {products.map((product) => (
+                      <Products key={product.id} product={product} />
+                    ))}
+                  </div>
+                )
+              }
+            />
+            <Route path="/product/:id" element={<ProductDetail />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );

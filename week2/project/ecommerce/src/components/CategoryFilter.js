@@ -1,22 +1,15 @@
 import React from 'react';
-import '../App.css';
 
-const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
+const CategoryFilter = ({ category, activeCategory, handleCategoryChange }) => {
   return (
-    <div>
-      {categories.map((category) => (
-        <button
-          key={category}
-          onClick={() => onCategoryChange(category)}
-          style={{
-            fontWeight: category === activeCategory ? 'bold' : 'normal',
-          }}
-        >
-          {category}
-          {/* console.log(category); */}
-        </button>
-      ))}
-    </div>
+    <button
+      className={category === activeCategory ? 'active' : ''}
+      onClick={() => handleCategoryChange(category)}
+    >
+      {category === 'all'
+        ? 'All'
+        : category.charAt(0).toUpperCase() + category.slice(1)}
+    </button>
   );
 };
 

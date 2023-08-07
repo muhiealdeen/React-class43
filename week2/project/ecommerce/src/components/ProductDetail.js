@@ -1,43 +1,49 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-const ProductDetail = ({ match }) => {
+const ProductDetail = () => {
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     setLoading(true);
     setError(null);
 
-    fetch(`https://fakestoreapi.com/products/${match.params.id}`)
+    fetch(`https://fakestoreapi.com/products/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setProduct(data);
         setLoading(false);
       })
       .catch((error) => {
-        setError('Failed to fetch product details');
         setLoading(false);
+        setError('Failed to fetch product details.');
+        console.error('Error fetching product details:', error);
       });
-  }, [match.params.id]);
+  }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <p className="loading">Loading...</p>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <p className="error-msg">Error: {error}</p>;
+  }
+
+  if (!product) {
+    return <p className="no-product">Product not found.</p>;
   }
 
   return (
-    <div>
-      <h1>Product Detail</h1>
-      <div>
+    <div className="detail-container">
+      <h2>{product.title}</h2>
+      <div className="image-detail">
         <img src={product.image} alt={product.title} />
-        <h3>{product.title}</h3>
-        <p>{product.description}</p>
-        <p>Price: {product.price}</p>
       </div>
+      <p>{product.description}</p>
+      <p>Price: {product.price}</p>
     </div>
   );
 };
